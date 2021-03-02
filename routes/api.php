@@ -23,7 +23,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {
-    
+
 
     $api->post('authenticate', 'App\Http\Controllers\AuthController@authenticate');
 
@@ -141,8 +141,11 @@ Route::group([
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
-
-
 });
+
+/**************************** DOHONE ROUTE *************************/
+Route::POST('/transaction/dohone-cotation-detail', 'App\Http\Controllers\DohoneController@check');
+Route::POST('/transaction/dohone-pay', 'App\Http\Controllers\DohoneController@orderRest');
+Route::POST('/transaction/dohone-sms-confirmation', 'App\Http\Controllers\DohoneController@SMSConfirmation');
 
 

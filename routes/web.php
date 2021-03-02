@@ -193,3 +193,6 @@ Route::post('/import_excel/import', 'App\Http\Controllers\ImportExcelController@
 
 Route::get('/change_password','App\Http\Controllers\PageController@change_password')->name('change_password');
 Route::get('/new_pass','App\Http\Controllers\UserController@change_password')->name('c_pass');
+
+
+Route::GET('/transaction/dohone-capture/{transaction}', 'App\Http\Controllers\DohoneController@verify')->name('transaction.dohone.verification');
