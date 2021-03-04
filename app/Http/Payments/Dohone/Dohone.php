@@ -206,10 +206,11 @@ class Dohone
      * @param $phone
      * @param $amount
      * @param $email
+     * @param $method
+     * @param null $orangeCode
      * @param null $commandID
      * @param null $endPage
      * @param null $notifyPage
-     * @param null $cancelPage
      * @param null $comment
      * @param string $name
      * @param string $lang
