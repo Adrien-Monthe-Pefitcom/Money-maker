@@ -11,7 +11,7 @@ return [
      * 10=Dohone, 14= Visa via Wari,15=Wari card,16=VISA/MASTERCARD, 17=YUP.
      */
     'start' => [
-        'rH' => 'XXXXXXXX',
+        'rH' => 'RW216B12442304739091400',
         'rDvs' => 'XAF',
         'source' => env('APP_NAME'),
         'logo' => 'assets/images/logo.png',

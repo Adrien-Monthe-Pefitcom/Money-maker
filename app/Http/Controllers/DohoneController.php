@@ -47,6 +47,7 @@ class DohoneController extends Controller
     public function orderRest(Request $request)
     {
         $transaction = Transaction::findOrFail($request->transaction_id);
+        $this->transaction = $transaction;
         $this->init($transaction->amount, "Paiment de la transaction " . $transaction->id, $transaction);
         return $this->launch($request);
     }
@@ -60,15 +61,15 @@ class DohoneController extends Controller
         if ($request->isJson()) {
             $result = Dohone::restInit(
                 $request->phone,
-                $this->transaction->amount+350,
-                auth()->user()->email,
+                $this->transaction->amount,
+                $request->email,
                 $request->get('method'),
                 $request->orangeCode,
                 $this->transaction->id,
                 url('/'),
                 route('transaction.dohone.verification', $this->transaction),
                 $this->data['reason'] . ' ' . Dohone::method($request->get('method')),
-                auth()->user()->name
+                $request->name
             );
 
             (new LogController())->save($result, "Info");
