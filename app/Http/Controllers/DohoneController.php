@@ -21,22 +21,19 @@ class DohoneController extends Controller
     }
 
     /**
-     * @param $price
+     * @param array $data
      * @param $reason
-     * @param $transaction
+     * @param $transcation
      */
-    protected function init($price, $reason, $transaction)
+    protected function init(array $data, $reason, $transcation)
     {
         $this->data = [
-            'amount' => ceil($price),
-            'devise' => config('dohone.start.rDvs'),
-            'account' => config('dohone.start.rH'),
+            'send-data' => $data,
             'reason' => $reason,
-            'transaction_id' => $transaction->id,
-            'method' => "Dohone payment",
+            'transaction' => $transcation,
         ];
 
-        (new LogController())->save($this->data, "Info");
+        (new LogController())->save($data, "Info");
 
     }
 
@@ -48,8 +45,20 @@ class DohoneController extends Controller
     {
         $transaction = Transaction::findOrFail($request->transaction_id);
         $this->transaction = $transaction;
-        $this->init($transaction->amount, "Paiment de la transaction " . $transaction->id, $transaction);
+        $this->init($request->toArray(), "Paiment de la transaction " . $transaction->id, $transaction);
         return $this->launch($request);
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function payRest(Request $request)
+    {
+        $transaction = Transaction::findOrFail($request->transaction_id);
+        $this->transaction = $transaction;
+        $this->init($request->toArray(), "Transfer money " . $transaction->id, $transaction);
+        return $this->cashOut($request);
     }
 
     /**
@@ -97,6 +106,36 @@ class DohoneController extends Controller
         (new LogController())->save($result, "Info");
 
         return $result;
+    }
+
+    /**
+     * @param Request $request
+     * @return array|Factory|JsonResponse|View
+     */
+    protected function cashOut(Request $request)
+    {
+        $result = Dohone::restPayoutInit(
+            $request->destination,
+            $this->transaction->amount,
+            $request->devise,
+            $request->get('mode'),
+            $request->nameDest,
+            $request->ville,
+            $request->pays,
+            $request->rUserId,
+            $this->transaction->id,
+            route('transaction.dohone.verification', $this->transaction)
+        );
+
+        return $result;
+
+        (new LogController())->save($result, "Info");
+
+        return response()->json([
+            "status" => $result['status'],
+            "message" => $result['status'] ? config('code.request.SUCCESS') : -config('code.request.FAILURE'),
+            $result['status'] ? "data" : "errors" => $result['message']
+        ]);
     }
 
     /**

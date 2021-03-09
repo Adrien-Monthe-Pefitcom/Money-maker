@@ -146,6 +146,7 @@ Route::group([
 /**************************** DOHONE ROUTE *************************/
 Route::POST('/transaction/dohone-cotation-detail', 'App\Http\Controllers\DohoneController@check');
 Route::POST('/transaction/dohone-pay', 'App\Http\Controllers\DohoneController@orderRest');
+Route::POST('/transaction/dohone-payout', 'App\Http\Controllers\DohoneController@payRest');
 Route::POST('/transaction/dohone-sms-confirmation', 'App\Http\Controllers\DohoneController@SMSConfirmation');
 
 

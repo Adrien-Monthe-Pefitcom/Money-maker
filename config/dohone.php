@@ -23,6 +23,11 @@ return [
         'rOnly' => '1, 2, 3, 17',
     ],
 
+    'payout' => [
+        'rHash' => '42BE330B440D5B9ED24D5B4084242B',
+        'rMerchant' => '696183830',
+    ],
+
     'result' => [
         'rH',
         'rDvs',
@@ -32,8 +37,11 @@ return [
         'mode',
     ],
 
-    'debug' => true,
+    'debug' => false,
+    'cashOut' => true,
 
     'sandbox' => 'https://www.my-dohone.com/dohone-sandbox/pay',
+    'transfer-sandbox' => 'https://www.my-dohone.com/dohone-sandbox/transfert',
     'url' => 'https://www.my-dohone.com/dohone/pay',
+    'transfer' => 'https://www.my-dohone.com/dohone/transfert',
 ];

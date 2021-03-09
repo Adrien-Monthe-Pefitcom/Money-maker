@@ -122,6 +122,29 @@ class Dohone
         }
         return $base_url;
     }
+    /**
+     * @param array $data
+     * @return Repository|mixed|string
+     */
+    private static function genCashOutUrl(array $data)
+    {
+        $base_url = config('dohone.cashOut') ? config('dohone.transfer') : config('dohone.transfer-sandbox');
+        $i = 0;
+        foreach ($data as $key => $value) {
+            if ($i == 0) {
+                $base_url = $base_url . '?' . $key . '=' . urlencode($value);
+            } else {
+                $base_url = $base_url . '&' . $key . '=' . urlencode($value);
+            }
+            $i++;
+        }
+        return $base_url;
+    }
+
+    public static function genHash($account, $mode, $amount, $devise,  $transID = null)
+    {
+        return md5($account.$mode.$amount.$devise.$transID.config('dohone.payout.rHash'));
+    }
 
     /**
      * @param $success
@@ -265,13 +288,66 @@ class Dohone
         return self::reply(Str::contains($resSplit[0], 'OK'), join(":", $resSplit), Str::contains(join(":", $resSplit), 'SMS'));
     }
 
+
+    /**
+     * @param $destination
+     * @param $amount
+     * @param $devise
+     * @param $mode
+     * @param $nameDest
+     * @param null $ville
+     * @param null $pays
+     * @param null $rUserId
+     * @param null $trandID
+     * @param null $notifyPage
+     * @return array|Factory|View
+     */
+    public static function restPayoutInit($destination, $amount, $devise, $mode, $nameDest,
+                                    $ville = null, $pays = null, $rUserId = null, $trandID = null, $notifyPage = null)
+    {
+
+        $data = array_merge(config('dohone.payout'), [
+            'account' => config('dohone.payout.rMerchant'),
+            'destination' => $destination,
+            'mode' => $mode,
+            'devise' => $devise,
+            'amount' => $amount,
+            'nameDest' => $nameDest,
+            'pays' => $pays,
+            'ville' => $ville,
+            'hash' => self::genHash(config('dohone.payout.rMerchant'), $mode, $amount, $devise, $trandID),
+            'transID' => $trandID,
+            'rUserId' => $rUserId,
+            'notifyPage' => $notifyPage ?? config('dohone.start.notifyPage'),
+        ]);
+
+        $validator = Validator::make($data, [
+            'account' => ['required'],
+            'devise' => ['required', Rule::in(['XAF', 'EUR', 'USD'])],
+            'destination' => ['required'],
+            'mode' => ['required', Rule::in([1, 3, 5, 6, 12])],
+            'nameDest' => ['required', 'string'],
+            'amount' => ['required'],
+            'hash' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            return self::reply(!$validator->fails(), $validator->errors());
+        }
+
+        $resSplit = explode(':', self::run($data, true));
+        return self::reply(Str::contains($resSplit[0], 'OK'), join(":", $resSplit), Str::contains(join(":", $resSplit), 'SMS'));
+    }
+
+
     /**
      * @param $data
+     * @param null $payout
      * @return bool|string
      */
-    protected static function run($data)
+    protected static function run($data, $payout = null)
     {
-        $curl = curl_init(self::genVerifyUrl($data));
+        $curl = curl_init($payout ? self::genCashOutUrl($data) : self::genVerifyUrl($data));
         curl_setopt($curl, CURLOPT_FAILONERROR, true);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
