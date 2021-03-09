@@ -127,8 +127,6 @@ class DohoneController extends Controller
             route('transaction.dohone.verification', $this->transaction)
         );
 
-        return $result;
-
         (new LogController())->save($result, "Info");
 
         return response()->json([
