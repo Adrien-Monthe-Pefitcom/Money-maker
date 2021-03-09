@@ -1,0 +1,99 @@
+{
+	"info": {
+		"_postman_id": "38c8d7a6-a90e-4204-ab24-b089bfa47fe8",
+		"name": "MoneyMaker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Payout Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"transaction_id\" : 2,\n    \"destination\" : \"694479053\",\n    \"devise\" : \"XAF\",\n    \"mode\" : 6,\n    \"nameDest\" : \"Junior\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/transaction/dohone-payout",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"transaction",
+						"dohone-payout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Payin Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"transaction_id\" : 3,\n    \"email\" : \"junior.djanzou@bhent.net\",\n    \"phone\" : \"655615620\",\n    \"method\" : 2,\n    \"name\" : \"David KALLA\",\n    \"orangeCode\" : \"280627\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/transaction/dohone-pay",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"transaction",
+						"dohone-pay"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cotation Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/transaction/dohone-cotation-detail",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"transaction",
+						"dohone-cotation-detail"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
