@@ -143,7 +143,11 @@ class DohoneController extends Controller
     public function SMSConfirmation(Request $request)
     {
         $result = Dohone::restSMSConfirmation($request->phone, $request->code);
-        return $this->liteResponse($result['status'] ? config('code.request.SUCCESS') : config('code.request.FAILURE'), $result['message']);
+        return response()->json([
+            "status" => $result['status'],
+            "message" => $result['status'] ? config('code.request.SUCCESS') : -config('code.request.FAILURE'),
+            $result['status'] ? "data" : "errors" => $result['message']
+        ]);
     }
 
     /**
