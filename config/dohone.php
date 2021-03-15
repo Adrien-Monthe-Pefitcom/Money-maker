@@ -11,7 +11,7 @@ return [
      * 10=Dohone, 14= Visa via Wari,15=Wari card,16=VISA/MASTERCARD, 17=YUP.
      */
     'start' => [
-        'rH' => 'RW216B12442304739091400',
+        'rH' => 'TP216F15455765505026705',
         'rDvs' => 'XAF',
         'source' => env('APP_NAME'),
         'logo' => 'assets/images/logo.png',
@@ -24,7 +24,7 @@ return [
     ],
 
     'payout' => [
-        'rHash' => '42BE330B440D5B9ED24D5B4084242B',
+        'rHash' => '8BC08BC07BB89881C11B69E437542B',
         'rMerchant' => '696183830',
     ],
 
